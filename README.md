@@ -1,16 +1,15 @@
 # Steve45Green.github.io
 
 <div style="text-align: center; margin-top: 60px; margin-bottom: 80px;">
-  <p class="typing-effect">>> SISTEMA ONLINE. MODO DE DESEMPENHO ATIVO.</p>
+  <p class="typing-effect">>> </p>
 </div>
 
 <div style="max-width: 800px; margin: 0 auto;">
   <div class="glass-card">
-    <span class="meta-info">:: ARQUIVO CRÍPTICO [NÍVEL ÔMEGA]</span>
-    <h3 style="margin-top: 0; color: #fff; font-weight: 300;">Esquemas do Motor Quântico</h3>
-    <p>Aceda aos dados técnicos da simulação.</p>
+    <span class="meta-info">:: My perspective</span>
+    <h3 style="margin-top: 0; color: #fff; font-weight: 300;">Documentation</h3>
     <a href="assets/documents/SEU_ARQUIVO.pdf" class="btn-download" target="_blank">
-      EXTRAIR DADOS
+      View documentation
     </a>
   </div>
 </div>
