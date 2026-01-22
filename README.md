@@ -1,7 +1,7 @@
 # Steve45Green.github.io
 
 <div style="text-align: center; margin-top: 60px; margin-bottom: 80px;">
-  <p class="typing-effect">>> SYSTEM ONLINE. PERFORMANCE MODE ACTIVE.</p>
+  <p class="typing-effect">>> SYSTEM ONLINE. WAKE UP...NEO </p>
 </div>
 
 <div style="max-width: 800px; margin: 0 auto;">
