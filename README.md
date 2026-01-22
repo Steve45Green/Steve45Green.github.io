@@ -9,7 +9,7 @@
   <div class="glass-card" style="border-left-color: var(--neon-pink);">
     <span class="meta-info">:: DOCUMENTO CLASSIFICADO [NÍVEL 5]</span>
     <h3 style="margin-top: 0; color: #fff;">Documentação do Projeto</h3>
-    <p>Aceda aqui aos ficheiros técnicos e esquemas do sistema.</p>
+      
     
     <a href="assets/documents/SEU_ARQUIVO.pdf" class="btn-download" target="_blank">
       DOWNLOAD DADOS
