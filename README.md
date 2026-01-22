@@ -1,14 +1,14 @@
 # Steve45Green.github.io
 
 <div style="text-align: center; margin-top: 60px; margin-bottom: 80px;">
-  <p class="typing-effect">>> CALIBRAÇÃO DE HERTZ CONCLUÍDA... FLUIDEZ MÁXIMA.</p>
+  <p class="typing-effect">>> SISTEMA REINICIADO... ESTABILIDADE 100%.</p>
 </div>
 
 <div style="max-width: 800px; margin: 0 auto;">
   <div class="glass-card">
     <span class="meta-info">:: ARQUIVO CRÍPTICO [NÍVEL ÔMEGA]</span>
     <h3 style="margin-top: 0; color: #fff; font-weight: 300;">Esquemas do Motor Quântico</h3>
-    <p>Aceda aos dados técnicos da simulação estabilizada (165Hz Ready).</p>
+    <p>Aceda aos dados técnicos da simulação corrigida.</p>
     <a href="assets/documents/SEU_ARQUIVO.pdf" class="btn-download" target="_blank">
       EXTRAIR DADOS
     </a>
@@ -38,86 +38,54 @@
 (function() {
   const canvas = document.getElementById('physics-canvas');
   const ctx = canvas.getContext('2d');
+  
+  // Variáveis Globais
   let width, height;
   let particles = [];
-  
-  // CONFIGURAÇÃO DE ALTA PRECISÃO
   let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
   let mouseDown = false;
-
-  // Parâmetros Físicos
-  const PARTICLE_COUNT = 320; 
-  const DRAG = 0.96; // Atrito do ar
-  const GRAVITY_STRENGTH = 0.55; 
-  const MOUSE_PULL = 6000;
-
+  
+  // CONFIGURAÇÃO FÍSICA (Ajustada para suavidade)
+  const PARTICLE_COUNT = 300; 
+  const FRICTION = 0.95; 
+  const GRAVITY = 0.6;
+  
+  // Classe da Partícula
   class Particle {
     constructor() { this.init(); }
 
     init() {
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      // Velocidade Inicial
       this.vx = (Math.random() - 0.5) * 2;
       this.vy = (Math.random() - 0.5) * 2;
-      this.baseSize = Math.random() * 2 + 1;
-      this.hueShift = Math.random() * 50 - 25; 
+      this.size = Math.random() * 2 + 1;
+      this.hueBase = Math.random() * 40 - 20; // Variação de cor
     }
 
-    // A física agora é calculada assumindo um passo de tempo ideal (independente dos Hz)
-    update() {
+    // Método de atualização que recebe o "Fator de Tempo"
+    update(factor) {
+      // 1. Calcular distâncias
       let dx = mouse.x - this.x;
       let dy = mouse.y - this.y;
-      
-      // Evitar divisão por zero e explosões no centro
       let distSq = dx*dx + dy*dy;
-      if (distSq < 500) distSq = 500; 
       
+      // Evitar divisão por zero e colapso total (Segurança)
+      if (distSq < 400) distSq = 400; 
       let dist = Math.sqrt(distSq);
 
-      // Força: Se clicar (-8), senão (1)
-      let forceDir = mouseDown ? -8 : 1; 
+      // 2. Aplicar Força (Gravidade ou Repulsão)
+      let direction = mouseDown ? -10 : 1; // Repulsão forte ao clicar
+      let force = (GRAVITY * 5000) / distSq; // Força baseada na massa
       
-      // Fórmula Gravitacional Suavizada
-      let force = (GRAVITY_STRENGTH * MOUSE_PULL) / distSq;
-      
-      let ax = (dx / dist) * force * forceDir;
-      let ay = (dy / dist) * force * forceDir;
+      let ax = (dx / dist) * force * direction;
+      let ay = (dy / dist) * force * direction;
 
-      // Aplicar Aceleração
-      this.vx += ax;
-      this.vy += ay;
+      // 3. Atualizar Velocidade com o Fator de Tempo
+      // Se tiveres 165Hz, o fator será pequeno (ex: 0.3), movendo menos por frame
+      this.vx += ax * factor;
+      this.vy += ay * factor;
 
-      // Aplicar Atrito (Drag)
-      this.vx *= DRAG;
-      this.vy *= DRAG;
-
-      // Mover
-      this.x += this.vx;
-      this.y += this.vy;
-
-      // Wrap-around (Teletransporte nas bordas)
-      if (this.x > width + 50) this.x = -50;
-      if (this.x < -50) this.x = width + 50;
-      if (this.y > height + 50) this.y = -50;
-      if (this.y < -50) this.y = height + 50;
-    }
-
-    draw() {
-      // Calcular velocidade para cor
-      const speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
-      // Suavizar o tamanho visualmente
-      const currentSize = this.baseSize * (1 + speed/8);
-      
-      let hue, lightness, glow;
-      
-      // Lógica de Cores "Quantum"
-      if (speed < 1.5) {
-        hue = 260 + this.hueShift; lightness = 50; glow = false; // Repouso (Roxo)
-      } else if (speed < 5) {
-        hue = 190 + this.hueShift; lightness = 60; glow = true;  // Ativo (Azul)
-      } else {
-        hue = 160 + this.hueShift; lightness = 85; glow = true;  // Energia (Branco/Verde)
-      }
-
-      const color = `hs
+      // 4. Atrito (Corrigido para Delta Time)
+      // Usamos Math.pow para que o atrito seja consistente independente dos FPS
+      let frictionAdjusted
