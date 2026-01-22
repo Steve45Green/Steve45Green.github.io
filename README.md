@@ -7,12 +7,11 @@
 <div style="max-width: 800px; margin: 0 auto;">
   
   <div class="glass-card" style="border-left-color: var(--neon-pink);">
-    <span class="meta-info">:: DOCUMENTO CLASSIFICADO [NÍVEL 5]</span>
+    <span class="meta-info">:: A minha perspectiva </span>
     <h3 style="margin-top: 0; color: #fff;">Documentação do Projeto</h3>
-      
-    
+ 
     <a href="assets/documents/SEU_ARQUIVO.pdf" class="btn-download" target="_blank">
-      DOWNLOAD DADOS
+      VER OS DOCUMENTOS
     </a>
   </div>
 
