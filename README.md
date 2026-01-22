@@ -1,5 +1,4 @@
 # Steve45Green.github.io
-Documentation
 <p class="typing-effect">A carregar sistema... Documentação iniciada.</p>
 
 <style>
