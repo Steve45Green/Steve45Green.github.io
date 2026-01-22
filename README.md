@@ -152,8 +152,7 @@
 })();
 </script>
 
-<style>
-/* CSS Extra para animação de escrita */
+<style>  
 .typing-effect {
   overflow: hidden;
   border-right: 2px solid var(--neon-cyan);
