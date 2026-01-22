@@ -6,7 +6,7 @@
 
 <div style="max-width: 800px; margin: 0 auto;">
   <div class="glass-card">
-    <span class="meta-info">:: CLASSIFIED ARCHIVE [OMEGA LEVEL]</span>
+    <span class="meta-info">:: ARCHIVE </span>
     <h3 style="margin-top: 0; color: #fff; font-weight: 300;">Core Perspectives & Analysis</h3>
     <p>Access the raw data files and detailed documentation.</p>
     
