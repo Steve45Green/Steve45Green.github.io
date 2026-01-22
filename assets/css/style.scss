@@ -3,90 +3,95 @@
 
 @import "{{ site.theme }}";
 
-/* =========================================
-   ESTILO GERAL & TIPOGRAFIA  
-   ========================================= */
+/* --- VARIÁVEIS DE DESIGN (PALETA CYBERPUNK) --- */
+:root {
+  --neon-cyan: #00f3ff;
+  --neon-pink: #bc13fe;
+  --glass-bg: rgba(10, 15, 30, 0.4);
+  --glass-border: rgba(0, 243, 255, 0.1);
+  --text-main: #e0e6ed;
+}
+
+/* --- ESTRUTURA GERAL --- */
 body {
-  /* O corpo tem de ser transparente para vermos o canvas da física atrás */
   background-color: transparent !important;
-  font-family: 'Courier New', Courier, monospace; /* Fonte mono-espaçada */
-  color: #e0e0e0;
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--text-main);
   margin: 0;
-  overflow-x: hidden; /* Previne scroll horizontal indesejado */
+  overflow-x: hidden;
+  line-height: 1.6;
 }
 
-/* Sombras para melhorar leitura sobre o fundo caótico */
-h1, h2, h3, p, li, span {
-  text-shadow: 0 2px 5px rgba(0,0,0, 0.9);
-}
-
-/* =========================================
-   MOTOR DE FÍSICA (CANVAS BACKGROUND)
-   ========================================= */
+/* O Canvas da Física fica no fundo */
 #physics-canvas {
-  position: fixed; /* Fixo na janela, não faz scroll */
+  position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  z-index: -1; /* Garante que fica ATRÁS de todo o conteúdo */
-  /* Gradiente de Vácuo Profundo */
-  background: radial-gradient(circle at bottom, #000000 0%, #050510 40%, #0b0b1a 100%);
-  pointer-events: none; /* Permite clicar através do canvas se necessário (gerido pelo JS) */
+  z-index: -1;
+  /* Gradiente mais rico: Preto -> Azul Profundo -> Roxo Escuro */
+  background: radial-gradient(circle at bottom, #020205 0%, #050510 50%, #12051a 100%);
 }
 
-/* =========================================
-   HEADER NÉON & ANIMAÇÕES
-   ========================================= */
-/* Efeito de Título a Falhar (Glitch/Neon) */
+/* --- TIPOGRAFIA E TÍTULOS --- */
 header h1 {
   color: #fff;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  /* Brilho Ciano Sofisticado */
   text-shadow: 
-    0 0 5px #fff,
-    0 0 10px #fff,
-    0 0 20px #00ff00,
-    0 0 40px #00ff00;
-  animation: flicker 3s infinite alternate;
+    0 0 5px rgba(255, 255, 255, 0.8),
+    0 0 15px var(--neon-cyan),
+    0 0 30px var(--neon-cyan);
+  animation: pulse-glow 4s infinite alternate;
 }
 
-@keyframes flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    text-shadow:
-      0 0 4px #fff,
-      0 0 10px #fff,
-      0 0 18px #00ff00,
-      0 0 38px #00ff00;
-    opacity: 1;
-  }
-  20%, 24%, 55% {       
-    text-shadow: none; opacity: 0.8; /* Breves momentos de "falha" de energia */
-  }
+@keyframes pulse-glow {
+  0% { opacity: 0.9; text-shadow: 0 0 10px var(--neon-cyan); }
+  100% { opacity: 1; text-shadow: 0 0 25px var(--neon-cyan), 0 0 50px var(--neon-cyan); }
 }
 
-/* =========================================
-   LINKS INTERATIVOS
-   ========================================= */
+/* --- COMPONENTES: GLASSMORPHISM CARDS --- */
+/* Esta classe será usada nos itens da lista no README */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px); /* O efeito de vidro fosco */
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  border-left: 3px solid var(--neon-cyan);
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0, 0.3);
+}
+
+.glass-card:hover {
+  transform: translateX(10px) scale(1.01);
+  border-left-color: var(--neon-pink); /* Muda para rosa ao passar o rato */
+  box-shadow: 0 0 20px rgba(188, 19, 254, 0.2);
+  background: rgba(20, 25, 50, 0.6);
+}
+
+/* --- LINKS --- */
 a {
-  transition: all 0.3s ease;
-  color: #00ff00; /* Verde Matrix padrão */
+  color: var(--neon-cyan);
   text-decoration: none;
-  position: relative;
+  font-weight: bold;
+  transition: color 0.3s;
 }
 
-/* Efeito Hover Explosivo */
 a:hover {
-  color: #ffffff !important;
-  background-color: rgba(0, 255, 0, 0.15);
-  padding: 2px 5px;
-  border-radius: 4px;
-  box-shadow: 0 0 15px #00ff00, inset 0 0 5px #00ff00;
-  text-shadow: 0 0 5px #fff;
+  color: var(--neon-pink);
+  text-decoration: none;
 }
 
-/* Estilização de caixas de código (se usares nos posts) */
-pre, code {
-  border: 1px solid #00ff00;
-  background-color: rgba(0, 10, 0, 0.9);
-  color: #ccffcc;
-  border-radius: 4px;
-} 
+/* Pequenos detalhes meta (datas) */
+.meta-info {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  margin-bottom: 5px;
+}
