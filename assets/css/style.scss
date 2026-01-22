@@ -3,83 +3,90 @@
 
 @import "{{ site.theme }}";
 
-/* --- 1. CONFIGURAÇÃO GERAL --- */
+/* =========================================
+   ESTILO GERAL & TIPOGRAFIA  
+   ========================================= */
 body {
-  background-color: transparent !important; /* Torna o corpo transparente para ver o espaço */
-  font-family: 'Courier New', Courier, monospace; /* Fonte Hacker */
+  /* O corpo tem de ser transparente para vermos o canvas da física atrás */
+  background-color: transparent !important;
+  font-family: 'Courier New', Courier, monospace; /* Fonte mono-espaçada */
   color: #e0e0e0;
+  margin: 0;
+  overflow-x: hidden; /* Previne scroll horizontal indesejado */
 }
 
-/* --- 2. FUNDO PORTAL ESPACIAL --- */
-#particles-js {
-  position: fixed;
+/* Sombras para melhorar leitura sobre o fundo caótico */
+h1, h2, h3, p, li, span {
+  text-shadow: 0 2px 5px rgba(0,0,0, 0.9);
+}
+
+/* =========================================
+   MOTOR DE FÍSICA (CANVAS BACKGROUND)
+   ========================================= */
+#physics-canvas {
+  position: fixed; /* Fixo na janela, não faz scroll */
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  z-index: -1; /* Fica atrás de tudo */
-  /* Gradiente Radial para simular o túnel/portal */
-  background: radial-gradient(ellipse at center, #1b2735 0%, #090a0f 100%);
+  z-index: -1; /* Garante que fica ATRÁS de todo o conteúdo */
+  /* Gradiente de Vácuo Profundo */
+  background: radial-gradient(circle at bottom, #000000 0%, #050510 40%, #0b0b1a 100%);
+  pointer-events: none; /* Permite clicar através do canvas se necessário (gerido pelo JS) */
 }
 
-/* --- 3. TÍTULO NÉON --- */
+/* =========================================
+   HEADER NÉON & ANIMAÇÕES
+   ========================================= */
+/* Efeito de Título a Falhar (Glitch/Neon) */
 header h1 {
   color: #fff;
   text-shadow: 
     0 0 5px #fff,
     0 0 10px #fff,
     0 0 20px #00ff00,
-    0 0 40px #00ff00,
-    0 0 80px #00ff00;
-  animation: flicker 2s infinite alternate;
+    0 0 40px #00ff00;
+  animation: flicker 3s infinite alternate;
 }
 
 @keyframes flicker {
-  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
     text-shadow:
       0 0 4px #fff,
-      0 0 11px #fff,
-      0 0 19px #00ff00,
-      0 0 40px #00ff00,
-      0 0 80px #00ff00;
+      0 0 10px #fff,
+      0 0 18px #00ff00,
+      0 0 38px #00ff00;
+    opacity: 1;
   }
-  20%, 24%, 55% { text-shadow: none; }
+  20%, 24%, 55% {       
+    text-shadow: none; opacity: 0.8; /* Breves momentos de "falha" de energia */
+  }
 }
 
-/* --- 4. LINKS INTERATIVOS --- */
-a { transition: all 0.3s ease; color: #00ff00; }
-
-a:hover {
-  color: #fff !important;
+/* =========================================
+   LINKS INTERATIVOS
+   ========================================= */
+a {
+  transition: all 0.3s ease;
+  color: #00ff00; /* Verde Matrix padrão */
   text-decoration: none;
-  background-color: rgba(0, 255, 0, 0.2);
+  position: relative;
+}
+
+/* Efeito Hover Explosivo */
+a:hover {
+  color: #ffffff !important;
+  background-color: rgba(0, 255, 0, 0.15);
   padding: 2px 5px;
   border-radius: 4px;
-  box-shadow: 0 0 15px #00ff00;
+  box-shadow: 0 0 15px #00ff00, inset 0 0 5px #00ff00;
+  text-shadow: 0 0 5px #fff;
 }
 
-/* --- 5. ANIMAÇÃO DE ESCRITA (TYPING) --- */
-.typing-effect {
-  overflow: hidden;
-  border-right: .15em solid #00ff00;
-  white-space: nowrap;
-  margin: 0 auto;
-  letter-spacing: .15em;
-  animation: 
-    typing 3.5s steps(40, end),
-    blink-caret .75s step-end infinite;
-  color: #00ff00;
-  font-family: monospace;
-  font-size: 1.1em;
-  max-width: fit-content;
-}
-
-@keyframes typing { from { width: 0 } to { width: 100% } }
-@keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #00ff00; } }
-
-/* Caixas de código */
+/* Estilização de caixas de código (se usares nos posts) */
 pre, code {
   border: 1px solid #00ff00;
-  background-color: rgba(0, 20, 0, 0.8);
+  background-color: rgba(0, 10, 0, 0.9);
   color: #ccffcc;
-}
+  border-radius: 4px;
+} 
