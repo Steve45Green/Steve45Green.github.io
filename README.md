@@ -15,8 +15,7 @@
 <hr>
 
 ### Sobre este Terminal
-Este é o meu espaço de documentação pessoal.
-Todos os dados aqui presentes estão protegidos por encriptação quântica (e pela licença Creative Commons).
+Este é o meu espaço de documentação pessoal .( licença Creative Commons).
 
 <div id="particles-js"></div>
 
