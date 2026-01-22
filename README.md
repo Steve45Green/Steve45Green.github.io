@@ -1,196 +1,175 @@
 # Steve45Green.github.io
 
-<div style="text-align: center; margin-top: 30px; margin-bottom: 40px;">
-  <p class="typing-effect">>> INICIALIZANDO SIMULAÇÃO GRAVITACIONAL N-CORPOS... SISTEMA ONLINE.</p>
+<div style="text-align: center; margin-top: 40px; margin-bottom: 60px;">
+  <p class="typing-effect">>>HI, my name is José Ameixa</p>
 </div>
 
-## Diário de Investigação
+<div style="max-width: 800px; margin: 0 auto;">
+  
+  <div class="glass-card" style="border-left-color: var(--neon-pink);">
+    <span class="meta-info">:: DOCUMENTO CLASSIFICADO [NÍVEL 5]</span>
+    <h3 style="margin-top: 0; color: #fff;">Documentação do Projeto</h3>
+    <p>Aceda aqui aos ficheiros técnicos e esquemas do sistema.</p>
+    
+    <a href="assets/documents/SEU_ARQUIVO.pdf" class="btn-download" target="_blank">
+      DOWNLOAD DADOS
+    </a>
+  </div>
 
-<ul style="list-style: none; padding: 0;">
+</div>
+
+<hr style="border-color: var(--neon-cyan); opacity: 0.2; width: 50%; margin: 40px auto;">
+
+<h2 style="text-align: center; margin-bottom: 30px; text-shadow: 0 0 10px var(--neon-cyan);">DIÁRIO DE BORDO</h2>
+
+<div style="max-width: 800px; margin: 0 auto;">
 {% for post in site.posts %}
-  <li style="margin-bottom: 15px; border-left: 3px solid #00ff00; padding-left: 10px; background: rgba(0,0,0,0.3);">
-    <span style="color: #00ff00; font-size: 0.8em;">[LOG DATE: {{ post.date | date: "%Y.%m.%d" }}]</span><br>
-    <a href="{{ post.url }}" style="font-size: 1.2em; font-weight: bold;">{{ post.title }}</a>
-  </li>
+  <div class="glass-card">
+    <span class="meta-info">:: LOG DATA [{{ post.date | date: "%Y.%m.%d" }}]</span>
+    <a href="{{ post.url }}" style="font-size: 1.4em; display: block;">{{ post.title }}</a>
+  </div>
 {% endfor %}
-</ul>
+</div>
 
-<hr style="border-color: #00ff00; opacity: 0.3; margin: 40px 0;">
-
-### Notas do Sistema
-Este terminal utiliza um motor de física experimental. O seu cursor actua como uma singularidade gravitacional.
-<br><span style="color: #00ff00;">>> CLIQUE E SEGURE PARA INVERTER A POLARIDADE GRAVÍTICA (MATÉRIA EXÓTICA).</span>
+<div style="text-align: center; margin-top: 60px; opacity: 0.6; font-size: 0.8em;">
+  <p>MOTOR DE FÍSICA V5.0 ATIVO. <br> <span style="color: var(--neon-pink);">CLIQUE NO FUNDO PARA INVERTER A GRAVIDADE.</span></p>
+</div>
 
 <canvas id="physics-canvas"></canvas>
 
 <script>
 (function() {
-  // Configuração Inicial do Canvas
   const canvas = document.getElementById('physics-canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
   let particles = [];
   
-  // --- PARÂMETROS DA SIMULAÇÃO FÍSICA ---
-  const PARTICLE_COUNT = 400;     // Densidade do universo (número de partículas)
-  const GRAVITY_CONSTANT = 0.9;   // Constante gravitacional (G)
-  const FRICTION = 0.97;          // Coeficiente de arrasto (atrito espacial para estabilidade)
-  const MOUSE_MASS = 9000;        // Massa da singularidade (o teu cursor)
+  // PARÂMETROS FÍSICOS
+  const PARTICLE_COUNT = 350;
+  const GRAVITY_CONSTANT = 0.85;
+  const FRICTION = 0.96;
+  const MOUSE_MASS = 9000;
   
-  // Estado do Rato (Singularidade)
-  // Inicia no centro do ecrã se o rato ainda não se mexeu
   let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-  let mouseDown = false; // Estado do clique para inversão de gravidade
+  let mouseDown = false;
 
-  // --- CLASSE VETORIAL DA PARTÍCULA ---
   class Particle {
-    constructor() {
-      this.init();
-    }
+    constructor() { this.init(); }
 
-    // Inicialização com entropia (valores aleatórios)
     init() {
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      // Velocidade inicial aleatória
       this.vx = (Math.random() - 0.5) * 2;
       this.vy = (Math.random() - 0.5) * 2;
-      this.size = Math.random() * 1.5 + 0.5; // Variação de massa/tamanho
-      // Base de cor (azul profundo para partículas frias)
-      this.baseR = 0; this.baseG = 100; this.baseB = 255;
+      this.size = Math.random() * 1.5 + 0.5;
     }
 
-    // O NÚCLEO DA FÍSICA: Atualização de posição e velocidade a cada frame
     update() {
-      // 1. Cálculo do Vetor de Distância (dx, dy)
       let dx = mouse.x - this.x;
       let dy = mouse.y - this.y;
-      
-      // Distância Euclidiana ao quadrado (para evitar raiz quadrada pesada na fórmula da força)
       let distSq = dx*dx + dy*dy;
-
-      // Prevenção de singularidade matemática (divisão por zero se a partícula tocar no rato)
       if (distSq < 100) distSq = 100;
       let dist = Math.sqrt(distSq);
 
-      // 2. Cálculo da Força Gravitacional (Baseado em Newton: F = G * M / r^2)
-      // Se o rato estiver pressionado, a direção é invertida (-1 = Repulsão/Anti-gravidade)
-      let forceDirection = mouseDown ? -2.5 : 1; 
+      // Gravidade Inversa ao Clicar
+      let forceDirection = mouseDown ? -3.5 : 1; 
       let force = (GRAVITY_CONSTANT * MOUSE_MASS) / distSq;
       
-      // Decomposição vetorial da força (Normalização do vetor)
       let forceX = (dx / dist) * force * forceDirection;
       let forceY = (dy / dist) * force * forceDirection;
 
-      // 3. Aplicação da Força à Velocidade (F=ma, assumindo m=1 para simplificar)
       this.vx += forceX;
       this.vy += forceY;
-
-      // 4. Aplicação de Atrito Espacial (Drag) para evitar aceleração infinita
       this.vx *= FRICTION;
       this.vy *= FRICTION;
-
-      // 5. Atualização da Posição
       this.x += this.vx;
       this.y += this.vy;
 
-      // 6. Condições de Fronteira (Wrap-around / Teletransporte toroidal)
-      // Se sair por um lado, entra pelo outro.
+      // Teletransporte nas bordas
       if (this.x > width) this.x = 0;
       if (this.x < 0) this.x = width;
       if (this.y > height) this.y = 0;
       if (this.y < 0) this.y = height;
     }
 
-    // RENDERIZAÇÃO
     draw() {
-      // Termodinâmica Visual: Calcular a velocidade escalar
+      // CORES BASEADAS NA VELOCIDADE
       const speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
-      // Mapear velocidade para intensidade de cor (Partículas mais rápidas ficam mais quentes/brancas)
-      const intensity = Math.min(255, speed * 35);
       
+      let r, g, b, alpha;
+      
+      // Lógica de cores: Lento (Roxo) -> Rápido (Ciano) -> Muito Rápido (Branco)
+      if (speed < 2.5) {
+        r = 80; g = 0; b = 180; alpha = 0.4; // Roxo Escuro
+      } else if (speed < 7) {
+        r = 0; g = 243; b = 255; alpha = 0.7; // Ciano Neon
+      } else {
+        r = 255; g = 255; b = 255; alpha = 0.95; // Branco
+      }
+
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      
-      // Gradiente de temperatura dinâmico: Azul (lento/frio) -> Branco (rápido/quente)
-      // A opacidade também aumenta com a velocidade.
-      ctx.fillStyle = `rgba(${this.baseR + intensity}, ${this.baseG + intensity}, ${this.baseB}, ${0.5 + speed/30})`;
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
       ctx.fill();
     }
   }
 
-  // --- CONTROLO DO MOTOR ---
   function init() {
     resize();
-    // Criar o universo de partículas
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push(new Particle());
-    }
-    loop(); // Iniciar o loop de renderização
+    particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) { particles.push(new Particle()); }
+    loop();
   }
 
-  // Lidar com redimensionamento da janela
   function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
   }
 
-  // LOOP DE RENDERIZAÇÃO (Game Loop - ~60 FPS)
   function loop() {
-    // Efeito de Rasto (Motion Blur): Limpar o canvas com um retângulo semi-transparente
-    // Isto faz com que os frames anteriores não desapareçam imediatamente, criando rastos.
-    ctx.fillStyle = 'rgba(0, 5, 16, 0.25)'; // Cor do fundo com 25% de opacidade
+    // Efeito de rasto (Motion Blur)
+    ctx.fillStyle = 'rgba(2, 6, 20, 0.25)'; 
     ctx.fillRect(0, 0, width, height);
-
-    // Atualizar e desenhar cada partícula
-    particles.forEach(p => {
-      p.update();
-      p.draw();
-    });
-
-    // Pedir o próximo frame ao navegador
+    
+    particles.forEach(p => { p.update(); p.draw(); });
     requestAnimationFrame(loop);
   }
 
-  // --- EVENT LISTENERS (Interação) ---
+  // Event Listeners
   window.addEventListener('resize', resize);
-  // Rato
   window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
   window.addEventListener('mousedown', () => mouseDown = true);
   window.addEventListener('mouseup', () => mouseDown = false);
-  // Touch (Mobile)
   window.addEventListener('touchmove', e => { 
       mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; 
-      // Prevenir scroll no mobile enquanto interage com a física
       e.preventDefault();
   }, { passive: false });
   window.addEventListener('touchstart', (e) => { 
-      mouseDown = true; 
-      mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; 
+      mouseDown = true; mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; 
   });
   window.addEventListener('touchend', () => mouseDown = false);
 
-  // Iniciar motor
   init();
 })();
 </script>
 
 <style>
+/* CSS Extra para animação de escrita */
 .typing-effect {
   overflow: hidden;
-  border-right: 3px solid #00ff00; /* Cursor estilo terminal antigo */
+  border-right: 2px solid var(--neon-cyan);
   white-space: nowrap;
   margin: 0 auto;
-  letter-spacing: 0.1em;
-  animation: 
-    typing 4s steps(60, end), /* Escrita letra a letra */
-    blink-caret .9s step-end infinite; /* Piscar do cursor */
-  color: #00ff00;
+  letter-spacing: 0.15em;
+  animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+  color: var(--neon-cyan);
   font-family: 'Courier New', monospace;
   font-weight: bold;
+  font-size: 1.2em;
   display: inline-block;
-  max-width: 100%; /* Responsivo */
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+  max-width: 90vw; /* Responsivo para telemóveis */
 }
 @keyframes typing { from { width: 0 } to { width: 100% } }
-@keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #00ff00; } }
+@keyframes blink-caret { 50% { border-color: transparent } }
 </style>
