@@ -3,7 +3,26 @@
 
 @import "{{ site.theme }}";
 
-/* --- 1. Efeito de Néon no Título --- */
+/* --- 1. CONFIGURAÇÃO GERAL --- */
+body {
+  background-color: transparent !important; /* Torna o corpo transparente para ver o espaço */
+  font-family: 'Courier New', Courier, monospace; /* Fonte Hacker */
+  color: #e0e0e0;
+}
+
+/* --- 2. FUNDO PORTAL ESPACIAL --- */
+#particles-js {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1; /* Fica atrás de tudo */
+  /* Gradiente Radial para simular o túnel/portal */
+  background: radial-gradient(ellipse at center, #1b2735 0%, #090a0f 100%);
+}
+
+/* --- 3. TÍTULO NÉON --- */
 header h1 {
   color: #fff;
   text-shadow: 
@@ -11,11 +30,10 @@ header h1 {
     0 0 10px #fff,
     0 0 20px #00ff00,
     0 0 40px #00ff00,
-    0 0 80px #00ff00; /* Brilho Verde Hacker */
-  animation: flicker 1.5s infinite alternate;
+    0 0 80px #00ff00;
+  animation: flicker 2s infinite alternate;
 }
 
-/* Animação de falha de luz (Flicker) */
 @keyframes flicker {
   0%, 18%, 22%, 25%, 53%, 57%, 100% {
     text-shadow:
@@ -25,49 +43,25 @@ header h1 {
       0 0 40px #00ff00,
       0 0 80px #00ff00;
   }
-  20%, 24%, 55% {       
-    text-shadow: none;
-  }
+  20%, 24%, 55% { text-shadow: none; }
 }
 
-/* --- 2. Links com Efeito Hover Explosivo --- */
-a {
-  transition: all 0.3s ease;
-}
+/* --- 4. LINKS INTERATIVOS --- */
+a { transition: all 0.3s ease; color: #00ff00; }
 
 a:hover {
-  color: #00ff00 !important; /* Verde Matrix */
+  color: #fff !important;
   text-decoration: none;
-  background-color: rgba(0, 255, 0, 0.1);
+  background-color: rgba(0, 255, 0, 0.2);
   padding: 2px 5px;
   border-radius: 4px;
-  box-shadow: 0 0 10px #00ff00;
-  transform: scale(1.1); /* Aumenta ligeiramente */
+  box-shadow: 0 0 15px #00ff00;
 }
 
-/* --- 3. O Corpo do Site (Modernizar) --- */
-body {
-  background-color: #0e0e0e; /* Preto mais profundo */
-  font-family: 'Courier New', Courier, monospace; /* Fonte Hacker */
-}
-
-/* Caixa de Código mais bonita */
-pre, code {
-  border: 1px solid #00ff00;
-  background-color: #001100;
-  color: #ccffcc;
-  border-radius: 5px;
-}
-
-/* Botões (se existirem) */
-.btn {
-  border: 1px solid #00ff00;
-  box-shadow: 0 0 5px #00ff00;
-}
-/* --- 4. Animação de Escrita (Typing Effect) --- */
+/* --- 5. ANIMAÇÃO DE ESCRITA (TYPING) --- */
 .typing-effect {
   overflow: hidden;
-  border-right: .15em solid #00ff00; /* Cursor a piscar */
+  border-right: .15em solid #00ff00;
   white-space: nowrap;
   margin: 0 auto;
   letter-spacing: .15em;
@@ -76,31 +70,16 @@ pre, code {
     blink-caret .75s step-end infinite;
   color: #00ff00;
   font-family: monospace;
-  font-size: 1.2em;
+  font-size: 1.1em;
   max-width: fit-content;
 }
 
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
+@keyframes typing { from { width: 0 } to { width: 100% } }
+@keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #00ff00; } }
 
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: #00ff00; }
-}
-/* --- 5. Fundo de Partículas --- */
-#particles-js {
-  position: fixed; /* Fica fixo enquanto fazes scroll */
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1; /* Garante que fica ATRÁS do texto */
-  background-color: #0e0e0e; /* A mesma cor de fundo que já tínhamos */
-}
-
-/* Pequeno ajuste para o corpo ser transparente e vermos o fundo */
-body {
-    background-color: transparent !important;
+/* Caixas de código */
+pre, code {
+  border: 1px solid #00ff00;
+  background-color: rgba(0, 20, 0, 0.8);
+  color: #ccffcc;
 }
