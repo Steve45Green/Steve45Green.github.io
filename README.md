@@ -1,7 +1,7 @@
 # Steve45Green.github.io
 
 <div style="text-align: center; margin-top: 40px; margin-bottom: 60px;">
-  <p class="typing-effect">>>HI, my name is José Ameixa</p>
+  <p class="typing-effect">>> ACESSO SEGURO </p>
 </div>
 
 <div style="max-width: 800px; margin: 0 auto;">
