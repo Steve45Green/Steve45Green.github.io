@@ -1,1 +1,66 @@
+---
+---
 
+@import "{{ site.theme }}";
+
+/* --- 1. Efeito de Néon no Título --- */
+header h1 {
+  color: #fff;
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #00ff00,
+    0 0 40px #00ff00,
+    0 0 80px #00ff00; /* Brilho Verde Hacker */
+  animation: flicker 1.5s infinite alternate;
+}
+
+/* Animação de falha de luz (Flicker) */
+@keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow:
+      0 0 4px #fff,
+      0 0 11px #fff,
+      0 0 19px #00ff00,
+      0 0 40px #00ff00,
+      0 0 80px #00ff00;
+  }
+  20%, 24%, 55% {       
+    text-shadow: none;
+  }
+}
+
+/* --- 2. Links com Efeito Hover Explosivo --- */
+a {
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: #00ff00 !important; /* Verde Matrix */
+  text-decoration: none;
+  background-color: rgba(0, 255, 0, 0.1);
+  padding: 2px 5px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px #00ff00;
+  transform: scale(1.1); /* Aumenta ligeiramente */
+}
+
+/* --- 3. O Corpo do Site (Modernizar) --- */
+body {
+  background-color: #0e0e0e; /* Preto mais profundo */
+  font-family: 'Courier New', Courier, monospace; /* Fonte Hacker */
+}
+
+/* Caixa de Código mais bonita */
+pre, code {
+  border: 1px solid #00ff00;
+  background-color: #001100;
+  color: #ccffcc;
+  border-radius: 5px;
+}
+
+/* Botões (se existirem) */
+.btn {
+  border: 1px solid #00ff00;
+  box-shadow: 0 0 5px #00ff00;
+}
