@@ -1,37 +1,35 @@
 # Steve45Green.github.io
 
-<div style="text-align: center; margin-top: 40px; margin-bottom: 60px;">
-  <p class="typing-effect">>> Wake UP! Neo </p>
+<div style="text-align: center; margin-top: 60px; margin-bottom: 80px;">
+  <p class="typing-effect">>> NÚCLEO DE ENERGIA ESTABILIZADO... BEM-VINDO.</p>
 </div>
 
 <div style="max-width: 800px; margin: 0 auto;">
-  
-  <div class="glass-card" style="border-left-color: var(--neon-pink);">
-    <span class="meta-info">:: A minha perspectiva </span>
-    <h3 style="margin-top: 0; color: #fff;">Documentação do Projeto</h3>
- 
+  <div class="glass-card">
+    <span class="meta-info">:: ARQUIVO CRÍPTICO [NÍVEL ÔMEGA]</span>
+    <h3 style="margin-top: 0; color: #fff; font-weight: 300;">Esquemas do Motor Quântico</h3>
+    <p>Aceda aos dados técnicos da nova simulação de partículas de luz.</p>
     <a href="assets/documents/SEU_ARQUIVO.pdf" class="btn-download" target="_blank">
-      VER OS DOCUMENTOS
+      EXTRAIR DADOS
     </a>
   </div>
-
 </div>
 
-<hr style="border-color: var(--neon-cyan); opacity: 0.2; width: 50%; margin: 40px auto;">
+<div style="height: 50px;"></div>
 
-<h2 style="text-align: center; margin-bottom: 30px; text-shadow: 0 0 10px var(--neon-cyan);">DIÁRIO DE BORDO</h2>
+<h2 style="text-align: center; margin-bottom: 40px; font-weight: 300; letter-spacing: 2px;">REGISTOS DO SISTEMA</h2>
 
 <div style="max-width: 800px; margin: 0 auto;">
 {% for post in site.posts %}
   <div class="glass-card">
-    <span class="meta-info">:: LOG DATA [{{ post.date | date: "%Y.%m.%d" }}]</span>
-    <a href="{{ post.url }}" style="font-size: 1.4em; display: block;">{{ post.title }}</a>
+    <span class="meta-info">:: CICLO [{{ post.date | date: "%Y.%m.%d" }}]</span>
+    <a href="{{ post.url }}" style="font-size: 1.4em; display: block; font-weight: 300;">{{ post.title }}</a>
   </div>
 {% endfor %}
 </div>
 
-<div style="text-align: center; margin-top: 60px; opacity: 0.6; font-size: 0.8em;">
-  <p>Physics Engine V5.0 active .<br> <span style="color: var(--neon-pink);">Click on the background to reverse gravity..</span></p>
+<div style="text-align: center; margin-top: 80px; opacity: 0.6; font-size: 0.8em; letter-spacing: 1px;">
+  <p>SINGULARIDADE ATIVA. <span style="color: var(--electric-blue);">CLIQUE PARA LIBERTAR ENERGIA.</span></p>
 </div>
 
 <canvas id="physics-canvas"></canvas>
@@ -43,11 +41,11 @@
   let width, height;
   let particles = [];
   
-  // PARÂMETROS FÍSICOS
-  const PARTICLE_COUNT = 350;
-  const GRAVITY_CONSTANT = 0.85;
-  const FRICTION = 0.96;
-  const MOUSE_MASS = 9000;
+  // PARÂMETROS FÍSICOS REFINADOS PARA FLUIDEZ
+  const PARTICLE_COUNT = 300; // Menos partículas, mas mais "caras" de desenhar
+  const GRAVITY_CONSTANT = 0.7; // Gravidade um pouco mais suave
+  const FRICTION = 0.98; // Menos atrito para movimento mais perpétuo
+  const MOUSE_MASS = 7000;
   
   let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
   let mouseDown = false;
@@ -58,20 +56,25 @@
     init() {
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 2;
-      this.vy = (Math.random() - 0.5) * 2;
-      this.size = Math.random() * 1.5 + 0.5;
+      // Velocidade inicial mais orgânica
+      this.vx = (Math.random() - 0.5) * 1.5;
+      this.vy = (Math.random() - 0.5) * 1.5;
+      // Tamanho base variável
+      this.baseSize = Math.random() * 2 + 1;
+      // Variação de cor inerente (algumas são naturalmente mais azuis, outras mais roxas)
+      this.hueShift = Math.random() * 40 - 20; 
     }
 
     update() {
       let dx = mouse.x - this.x;
       let dy = mouse.y - this.y;
       let distSq = dx*dx + dy*dy;
-      if (distSq < 100) distSq = 100;
+      // Zona de exclusão maior no centro para evitar aglomeração excessiva
+      if (distSq < 400) distSq = 400; 
       let dist = Math.sqrt(distSq);
 
-      // Gravidade Inversa ao Clicar
-      let forceDirection = mouseDown ? -3.5 : 1; 
+      // Repulsão mais forte e explosiva no clique
+      let forceDirection = mouseDown ? -8 : 1; 
       let force = (GRAVITY_CONSTANT * MOUSE_MASS) / distSq;
       
       let forceX = (dx / dist) * force * forceDirection;
@@ -84,32 +87,47 @@
       this.x += this.vx;
       this.y += this.vy;
 
-      // Teletransporte nas bordas
-      if (this.x > width) this.x = 0;
-      if (this.x < 0) this.x = width;
-      if (this.y > height) this.y = 0;
-      if (this.y < 0) this.y = height;
+      // Teletransporte suave nas bordas
+      if (this.x > width + 50) this.x = -50;
+      if (this.x < -50) this.x = width + 50;
+      if (this.y > height + 50) this.y = -50;
+      if (this.y < -50) this.y = height + 50;
     }
 
+    // O NOVO RENDERIZADOR "QUANTUM GLOW"
     draw() {
-      // CORES BASEADAS NA VELOCIDADE
       const speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+      // O tamanho aumenta ligeiramente com a velocidade
+      const currentSize = this.baseSize * (1 + speed/10);
       
-      let r, g, b, alpha;
+      // Definição de cores baseada na velocidade (HSLA para transições mais suaves)
+      let hue, lightness, glowStrong;
       
-      // Lógica de cores: Lento (Roxo) -> Rápido (Ciano) -> Muito Rápido (Branco)
-      if (speed < 2.5) {
-        r = 80; g = 0; b = 180; alpha = 0.4; // Roxo Escuro
-      } else if (speed < 7) {
-        r = 0; g = 243; b = 255; alpha = 0.7; // Ciano Neon
+      if (speed < 2) {
+        // Estado Repouso: Violeta profundo
+        hue = 260 + this.hueShift; lightness = 50; glowStrong = false;
+      } else if (speed < 6) {
+        // Estado Ativo: Azul Elétrico
+        hue = 200 + this.hueShift; lightness = 60; glowStrong = true;
       } else {
-        r = 255; g = 255; b = 255; alpha = 0.95; // Branco
+        // Estado Alta Energia: Ciano/Branco Esverdeado
+        hue = 160 + this.hueShift; lightness = 80; glowStrong = true;
       }
 
+      const color = `hsla(${hue}, 100%, ${lightness}%, 0.8)`;
+      
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      // A MAGIA: Usar shadowBlur para criar luz real
+      // Partículas rápidas têm um brilho muito maior
+      ctx.shadowBlur = glowStrong ? currentSize * 4 : currentSize * 2;
+      ctx.shadowColor = color;
+      ctx.fillStyle = color;
+      
+      ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
       ctx.fill();
+      
+      // Reset do shadow para não afetar outras coisas (performance)
+      ctx.shadowBlur = 0; 
     }
   }
 
@@ -126,22 +144,25 @@
   }
 
   function loop() {
-    // Efeito de rasto (Motion Blur)
-    ctx.fillStyle = 'rgba(2, 6, 20, 0.25)'; 
+    // Limpeza do canvas com "fade" para rastos de luz suaves
+    // Usamos um azul muito escuro e transparente em vez de preto
+    ctx.fillStyle = 'rgba(3, 0, 20, 0.2)'; 
     ctx.fillRect(0, 0, width, height);
     
+    // Usar "lighter" composite mode faz as partículas brilharem quando se sobrepõem
+    ctx.globalCompositeOperation = 'lighter';
     particles.forEach(p => { p.update(); p.draw(); });
+    ctx.globalCompositeOperation = 'source-over'; // Reset
+
     requestAnimationFrame(loop);
   }
 
-  // Event Listeners
   window.addEventListener('resize', resize);
   window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
   window.addEventListener('mousedown', () => mouseDown = true);
   window.addEventListener('mouseup', () => mouseDown = false);
   window.addEventListener('touchmove', e => { 
-      mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; 
-      e.preventDefault();
+      mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; e.preventDefault();
   }, { passive: false });
   window.addEventListener('touchstart', (e) => { 
       mouseDown = true; mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; 
@@ -152,21 +173,21 @@
 })();
 </script>
 
-<style>  
+<style>
+/* Animação de escrita atualizada para a nova paleta */
 .typing-effect {
   overflow: hidden;
-  border-right: 2px solid var(--neon-cyan);
+  border-right: 2px solid var(--electric-blue);
   white-space: nowrap;
   margin: 0 auto;
-  letter-spacing: 0.15em;
-  animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-  color: var(--neon-cyan);
+  letter-spacing: 0.2em;
+  animation: typing 4s steps(50, end), blink-caret .9s step-end infinite;
+  color: var(--electric-blue);
   font-family: 'Courier New', monospace;
-  font-weight: bold;
-  font-size: 1.2em;
+  font-weight: 300;
+  font-size: 1.1em;
   display: inline-block;
-  text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
-  max-width: 90vw; /* Responsivo para telemóveis */
+  text-shadow: 0 0 15px rgba(0, 191, 255, 0.7);
 }
 @keyframes typing { from { width: 0 } to { width: 100% } }
 @keyframes blink-caret { 50% { border-color: transparent } }
