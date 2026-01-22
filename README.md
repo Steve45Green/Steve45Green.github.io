@@ -31,7 +31,7 @@
 </div>
 
 <div style="text-align: center; margin-top: 60px; opacity: 0.6; font-size: 0.8em;">
-  <p>MOTOR DE FÍSICA V5.0 ATIVO. <br> <span style="color: var(--neon-pink);">CLIQUE NO FUNDO PARA INVERTER A GRAVIDADE.</span></p>
+  <p>Physics Engine V5.0 active .<br> <span style="color: var(--neon-pink);">Click on the background to reverse gravity..</span></p>
 </div>
 
 <canvas id="physics-canvas"></canvas>
