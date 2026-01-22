@@ -3,18 +3,18 @@
 
 @import "{{ site.theme }}";
 
-/* --- VARIÁVEIS DE DESIGN (PALETA CYBERPUNK) --- */
+/* --- 1. VARIÁVEIS DO SISTEMA (PALETA NEON) --- */
 :root {
   --neon-cyan: #00f3ff;
   --neon-pink: #bc13fe;
   --glass-bg: rgba(10, 15, 30, 0.4);
-  --glass-border: rgba(0, 243, 255, 0.1);
+  --glass-border: rgba(0, 243, 255, 0.15);
   --text-main: #e0e6ed;
 }
 
-/* --- ESTRUTURA GERAL --- */
+/* --- 2. ESTRUTURA GLOBAL --- */
 body {
-  background-color: transparent !important;
+  background-color: transparent !important; /* Transparente para ver o canvas */
   font-family: 'Courier New', Courier, monospace;
   color: var(--text-main);
   margin: 0;
@@ -22,7 +22,7 @@ body {
   line-height: 1.6;
 }
 
-/* O Canvas da Física fica no fundo */
+/* O Canvas da Física (Fundo) */
 #physics-canvas {
   position: fixed;
   width: 100%;
@@ -30,17 +30,15 @@ body {
   top: 0;
   left: 0;
   z-index: -1;
-  /* Gradiente mais rico: Preto -> Azul Profundo -> Roxo Escuro */
-  background: radial-gradient(circle at bottom, #020205 0%, #050510 50%, #12051a 100%);
+  /* Gradiente "Deep Space" */
+  background: radial-gradient(circle at bottom, #020205 0%, #060614 50%, #15061e 100%);
 }
 
-/* --- TIPOGRAFIA E TÍTULOS --- */
+/* --- 3. TIPOGRAFIA & CABEÇALHO --- */
 header h1 {
   color: #fff;
-  font-weight: bold;
-  letter-spacing: 2px;
   text-transform: uppercase;
-  /* Brilho Ciano Sofisticado */
+  letter-spacing: 3px;
   text-shadow: 
     0 0 5px rgba(255, 255, 255, 0.8),
     0 0 15px var(--neon-cyan),
@@ -53,45 +51,67 @@ header h1 {
   100% { opacity: 1; text-shadow: 0 0 25px var(--neon-cyan), 0 0 50px var(--neon-cyan); }
 }
 
-/* --- COMPONENTES: GLASSMORPHISM CARDS --- */
-/* Esta classe será usada nos itens da lista no README */
+/* --- 4. COMPONENTES: CARTÕES DE VIDRO (GLASSMORPHISM) --- */
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(8px); /* O efeito de vidro fosco */
+  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--glass-border);
   border-left: 3px solid var(--neon-cyan);
-  padding: 15px 20px;
-  margin-bottom: 20px;
+  padding: 20px 25px;
+  margin-bottom: 25px;
   border-radius: 4px;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 4px 15px rgba(0,0,0, 0.3);
+  box-shadow: 0 4px 15px rgba(0,0,0, 0.4);
 }
 
 .glass-card:hover {
-  transform: translateX(10px) scale(1.01);
-  border-left-color: var(--neon-pink); /* Muda para rosa ao passar o rato */
-  box-shadow: 0 0 20px rgba(188, 19, 254, 0.2);
-  background: rgba(20, 25, 50, 0.6);
+  transform: translateX(5px) scale(1.01);
+  border-left-color: var(--neon-pink);
+  background: rgba(20, 25, 50, 0.7);
+  box-shadow: 0 0 25px rgba(188, 19, 254, 0.15);
 }
 
-/* --- LINKS --- */
+.meta-info {
+  font-size: 0.75em;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* --- 5. LINKS --- */
 a {
   color: var(--neon-cyan);
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s;
 }
+a:hover { color: var(--neon-pink); }
 
-a:hover {
-  color: var(--neon-pink);
-  text-decoration: none;
+/* --- 6. BOTÃO DE DOWNLOAD TÁTICO (NOVO) --- */
+.btn-download {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 25px;
+  border: 1px solid var(--neon-cyan);
+  background: rgba(0, 243, 255, 0.05);
+  color: var(--neon-cyan) !important;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  /* Recorte Sci-Fi nos cantos */
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  transition: all 0.3s ease;
 }
 
-/* Pequenos detalhes meta (datas) */
-.meta-info {
-  font-size: 0.8em;
-  color: rgba(255, 255, 255, 0.5);
-  display: block;
-  margin-bottom: 5px;
+.btn-download:hover {
+  background: var(--neon-cyan);
+  color: #050510 !important; /* Texto escuro no hover */
+  box-shadow: 0 0 20px var(--neon-cyan);
+  cursor: pointer;
 }
+
+.btn-download::before { content: "⬇ "; }
