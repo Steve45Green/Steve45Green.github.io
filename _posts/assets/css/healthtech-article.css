@@ -1,0 +1,346 @@
+/* ===========================================
+   HEALTHTECH ARTICLE CUSTOM STYLES
+   Para adicionar ao teu _sass ou assets/css
+   =========================================== */
+
+:root {
+  --electric-blue: #00bfff;
+  --cyber-green: #00ff88;
+  --warning-red: #ff4444;
+  --terminal-bg: rgba(3, 0, 20, 0.95);
+  --code-bg: rgba(0, 191, 255, 0.05);
+  --border-glow: 0 0 10px rgba(0, 191, 255, 0.3);
+}
+
+/* Terminal Header */
+.terminal-header {
+  background: var(--terminal-bg);
+  border: 1px solid var(--electric-blue);
+  border-left: 4px solid var(--electric-blue);
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  font-family: 'Courier New', monospace;
+  color: var(--electric-blue);
+  box-shadow: var(--border-glow);
+}
+
+.terminal-header .blink {
+  animation: blink-cursor 1s step-end infinite;
+}
+
+@keyframes blink-cursor {
+  50% { opacity: 0; }
+}
+
+/* Data Blocks */
+.data-block {
+  background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+  border: 1px solid rgba(0, 191, 255, 0.3);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.data-block .label {
+  color: var(--cyber-green);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.data-block .label::after {
+  content: '';
+  display: block;
+}
+
+/* Warning Blocks */
+.warning-block {
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid var(--warning-red);
+  border-left: 4px solid var(--warning-red);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  color: var(--warning-red);
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.alert-block {
+  background: linear-gradient(135deg, rgba(255, 68, 68, 0.15) 0%, rgba(0, 0, 0, 0.3) 100%);
+  border: 2px solid var(--warning-red);
+  padding: 1.5rem;
+  margin: 2rem 0;
+  text-align: center;
+  font-weight: bold;
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% { box-shadow: 0 0 5px var(--warning-red); }
+  50% { box-shadow: 0 0 20px var(--warning-red), 0 0 30px rgba(255, 68, 68, 0.5); }
+}
+
+/* Terminal Output */
+.terminal-output {
+  background: var(--terminal-bg);
+  border: 1px solid var(--electric-blue);
+  padding: 2rem;
+  margin: 2rem 0;
+  font-family: 'Courier New', monospace;
+  color: var(--cyber-green);
+  line-height: 1.8;
+  box-shadow: 
+    var(--border-glow),
+    inset 0 0 50px rgba(0, 191, 255, 0.05);
+}
+
+/* Checklist Styling */
+.checklist {
+  background: rgba(0, 191, 255, 0.05);
+  border: 1px solid rgba(0, 191, 255, 0.2);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.checklist h3 {
+  color: var(--electric-blue);
+  border-bottom: 1px solid rgba(0, 191, 255, 0.3);
+  padding-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+}
+
+.checklist h3:first-child {
+  margin-top: 0;
+}
+
+.checklist ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.checklist li {
+  padding: 0.5rem 0;
+  padding-left: 2rem;
+  position: relative;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.checklist li::before {
+  content: '[ ]';
+  position: absolute;
+  left: 0;
+  color: var(--electric-blue);
+}
+
+/* Tables */
+article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+article th {
+  background: rgba(0, 191, 255, 0.2);
+  color: var(--electric-blue);
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(0, 191, 255, 0.3);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+article td {
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(0, 191, 255, 0.15);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+article tr:hover td {
+  background: rgba(0, 191, 255, 0.1);
+}
+
+/* Code Blocks Enhancement */
+article pre {
+  background: var(--terminal-bg) !important;
+  border: 1px solid rgba(0, 191, 255, 0.3);
+  border-left: 4px solid var(--electric-blue);
+  padding: 1.5rem;
+  overflow-x: auto;
+  box-shadow: var(--border-glow);
+}
+
+article code {
+  font-family: 'Courier New', 'Fira Code', monospace;
+  font-size: 0.85rem;
+}
+
+article p code,
+article li code {
+  background: rgba(0, 191, 255, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  color: var(--electric-blue);
+}
+
+/* Blockquotes */
+article blockquote {
+  border-left: 4px solid var(--cyber-green);
+  background: rgba(0, 255, 136, 0.05);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+
+article blockquote em {
+  color: var(--cyber-green);
+}
+
+/* Details/Summary (References) */
+article details {
+  background: rgba(0, 191, 255, 0.05);
+  border: 1px solid rgba(0, 191, 255, 0.2);
+  margin: 1.5rem 0;
+}
+
+article summary {
+  background: rgba(0, 191, 255, 0.1);
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  color: var(--electric-blue);
+  letter-spacing: 0.1em;
+}
+
+article summary:hover {
+  background: rgba(0, 191, 255, 0.2);
+}
+
+article details[open] summary {
+  border-bottom: 1px solid rgba(0, 191, 255, 0.2);
+}
+
+article details > *:not(summary) {
+  padding: 0 1.5rem;
+}
+
+/* Footer Terminal */
+.footer-terminal {
+  background: var(--terminal-bg);
+  border: 1px solid var(--electric-blue);
+  padding: 1rem 1.5rem;
+  margin-top: 3rem;
+  font-family: 'Courier New', monospace;
+}
+
+.footer-terminal .prompt {
+  color: var(--cyber-green);
+}
+
+.footer-terminal .cursor {
+  color: var(--electric-blue);
+  margin-left: 0.5rem;
+}
+
+/* Horizontal Rules */
+article hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--electric-blue),
+    transparent
+  );
+  margin: 3rem 0;
+}
+
+/* Section Headers */
+article h2 {
+  color: var(--electric-blue);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(0, 191, 255, 0.3);
+  padding-bottom: 0.5rem;
+  margin-top: 3rem;
+}
+
+article h3 {
+  color: var(--cyber-green);
+  font-family: 'Courier New', monospace;
+}
+
+/* ASCII Art Diagrams */
+article pre:has(code:not([class])) {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--electric-blue);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .data-block,
+  .terminal-output,
+  .checklist {
+    padding: 1rem;
+  }
+  
+  article pre {
+    font-size: 0.7rem;
+    padding: 1rem;
+  }
+  
+  article table {
+    font-size: 0.8rem;
+  }
+  
+  article th,
+  article td {
+    padding: 0.5rem;
+  }
+}
+
+/* Animations */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.terminal-output::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(
+    transparent 50%,
+    rgba(0, 191, 255, 0.03) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+/* Link Styling */
+article a {
+  color: var(--electric-blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+article a:hover {
+  border-bottom-color: var(--electric-blue);
+  text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+}
+
+/* Strong/Bold */
+article strong {
+  color: var(--cyber-green);
+  font-weight: bold;
+}
+
+
