@@ -3,8 +3,9 @@ layout: post
 title: "A Era da Saúde Algorítmica em Portugal"
 subtitle: "Regulação, Engenharia e Estratégia para HealthTech em 2026"
 date: 2026-01-30
-author: Steve Green aka José Ameixa
+author: Steve45Green aka José Ameixa
 tags: [HealthTech, AI Act, Portugal, Federated Learning, RGPD, Compliance]
+alt_lang_url: /assets/documents/algorithmic-health-portugal.html
 excerpt: "Uma análise crítica dos bloqueios regulatórios, soluções técnicas e estratégias de sobrevivência para startups de IA na saúde em Portugal."
 ---
 

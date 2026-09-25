@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="{{ page.lang | default: site.lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#030014">
+  {% seo %}
+  {% feed_meta %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030014'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='36' font-weight='700' text-anchor='middle' fill='%2300BFFF'%3ES%3C/text%3E%3C/svg%3E">
+</head>
+<body class="{{ page.body_class }}">
+  <a class="skip" href="#main">Saltar para o conteúdo</a>
+  {% if page.particles %}<canvas id="physics-canvas" aria-hidden="true"></canvas>{% endif %}
+
+  <header class="site-header">
+    <div class="bar">
+      <a class="logo" href="{{ '/' | relative_url }}">STEVE45GREEN</a>
+      <nav aria-label="Principal">
+        <a href="{{ '/' | relative_url }}#artigos">Artigos</a>
+        <a href="{{ '/' | relative_url }}#projetos">Projetos</a>
+        <a href="https://github.com/{{ site.github_username }}">GitHub</a>
+        <a href="{{ '/feed.xml' | relative_url }}" title="Subscrever os artigos (RSS)">RSS</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <p>© {{ 'now' | date: '%Y' }} {{ site.author }} · Textos sob <a href="https://creativecommons.org/licenses/by/4.0/deed.pt">CC BY 4.0</a> · <a href="https://github.com/{{ site.github_username }}/{{ site.github_username }}.github.io">Código do site</a></p>
+  </footer>
+
+  {% if page.particles %}<script src="{{ '/assets/js/particles.js' | relative_url }}" defer></script>{% endif %}
+</body>
+</html>

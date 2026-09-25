@@ -1,0 +1,29 @@
+---
+layout: default
+---
+{% assign words = content | strip_html | number_of_words %}
+{% assign minutes = words | divided_by: 220 | plus: 1 %}
+<article class="post">
+  <header class="post-header">
+    <p class="meta-info">:: {{ page.date | date: "%Y.%m.%d" }} · {{ minutes }} min de leitura</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.subtitle %}<p class="subtitle">{{ page.subtitle }}</p>{% endif %}
+    <p class="byline">por {{ page.author | default: site.author }}</p>
+    {% if page.tags %}
+    <ul class="tags" aria-label="Etiquetas">
+      {% for tag in page.tags %}<li>{{ tag }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    {% if page.alt_lang_url %}
+    <p class="alt-lang"><a href="{{ page.alt_lang_url | relative_url }}" hreflang="en">Read it in English</a></p>
+    {% endif %}
+  </header>
+
+  <div class="prose">
+    {{ content }}
+  </div>
+
+  <footer class="post-footer">
+    <a class="btn btn-ghost" href="{{ '/' | relative_url }}#artigos">← Todos os artigos</a>
+  </footer>
+</article>

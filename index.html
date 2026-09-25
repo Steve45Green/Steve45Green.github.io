@@ -1,0 +1,46 @@
+---
+layout: default
+particles: true
+body_class: home
+---
+<section class="hero">
+  <p class="typing-effect">&gt;&gt; SYSTEM ONLINE. WAKE UP… NEO</p>
+  <h1 class="hero-title">Engenharia, IA aplicada<br class="br-wide"> e as regras à volta dela.</h1>
+  <p class="lead">Sou José Ameixa, aka Steve45Green. Escrevo sobre o que acontece quando a inteligência artificial sai do protótipo e entra em sítios com regras, como a saúde e a universidade, e construo ferramentas que as respeitam.</p>
+  <div class="actions">
+    <a class="btn" href="#artigos">Ler os artigos</a>
+    <a class="btn btn-ghost" href="#projetos">Ver os projetos</a>
+  </div>
+</section>
+
+<section id="projetos" class="block">
+  <h2 class="section-title">Projetos</h2>
+  <article class="glass-card project">
+    <img src="{{ '/assets/images/hint-ladder/slides-tcp.png' | relative_url }}" alt="Um slide real gerado pelo Hint Ladder: o three-way handshake do TCP, passo a passo" width="1280" height="720" loading="lazy">
+    <div>
+      <span class="meta-info">:: projeto · open source · MIT</span>
+      <h3>Hint Ladder</h3>
+      <p>Um tutor de IA para Engenharia Informática, feito como plugin do Claude Code: um especialista por cadeira, aulas e slides que se corrigem sozinhos, e uma escada de pistas que nunca entrega o trabalho avaliado. Nos testes, 0 soluções entregues em 24 trabalhos avaliados, contra 18 sem ele.</p>
+      <div class="actions">
+        <a class="btn" href="{{ '/2026/09/25/hint-ladder.html' | relative_url }}">Ler o artigo</a>
+        <a class="btn btn-ghost" href="https://github.com/Steve45Green/hint-ladder">Código no GitHub</a>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section id="artigos" class="block">
+  <h2 class="section-title">Artigos</h2>
+  {% for post in site.posts %}
+  {% assign words = post.content | strip_html | number_of_words %}
+  <a class="glass-card post-card" href="{{ post.url | relative_url }}">
+    <span class="meta-info">:: {{ post.date | date: "%Y.%m.%d" }} · {{ words | divided_by: 220 | plus: 1 }} min</span>
+    <h3>{{ post.title }}</h3>
+    {% if post.subtitle %}<p class="card-subtitle">{{ post.subtitle }}</p>{% endif %}
+    <p>{{ post.excerpt | strip_html | truncatewords: 60 }}</p>
+    {% if post.tags %}<ul class="tags">{% for tag in post.tags limit: 5 %}<li>{{ tag }}</li>{% endfor %}</ul>{% endif %}
+  </a>
+  {% endfor %}
+</section>
+
+<p class="easter-egg">SINGULARITY ACTIVE. <span>CLICA E MANTÉM PARA LIBERTAR ENERGIA.</span></p>

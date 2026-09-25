@@ -1,2 +1,25 @@
-title: Steve45Green Doc 
-theme: jekyll-theme-minimal
+title: Steve45Green
+tagline: Engenharia, IA aplicada e regulação
+description: Artigos e projetos de Steve45Green aka José Ameixa sobre engenharia de software, IA aplicada e regulação em Portugal.
+author: Steve45Green aka José Ameixa
+lang: pt-PT
+url: https://steve45green.github.io
+github_username: Steve45Green
+
+permalink: /:year/:month/:day/:title.html
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+exclude:
+  - README.md
+  - LICENSE.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
