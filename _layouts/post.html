@@ -3,7 +3,8 @@ layout: default
 ---
 {% assign words = content | strip_html | number_of_words %}
 {% assign minutes = words | divided_by: 220 | plus: 1 %}
-<article class="post">
+{% if page.feature %}<div class="read-progress" aria-hidden="true"><span></span></div>{% endif %}
+<article class="post{% if page.feature %} feature{% endif %}">
   <header class="post-header">
     <p class="meta-info">:: {{ page.date | date: "%Y.%m.%d" }} · {{ minutes }} min de leitura</p>
     <h1>{{ page.title }}</h1>

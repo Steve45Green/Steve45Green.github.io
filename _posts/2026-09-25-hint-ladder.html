@@ -1,0 +1,322 @@
+---
+layout: post
+title: "Hint Ladder: um tutor de IA que se recusa a fazer os teus trabalhos"
+subtitle: "Como construí um plugin do Claude Code para Engenharia Informática que ensina, dá feedback, vigia o Moodle por ti e mede o que promete"
+date: 2026-09-25
+author: Steve45Green aka José Ameixa
+tags: [IA, Educação, Claude Code, Open Source, Engenharia Informática]
+excerpt: "A IA escreve um trabalho prático em dez segundos; a defesa oral continua a ser tua. O Hint Ladder transforma o Claude Code num tutor que ensina cada cadeira do curso e nunca entrega o trabalho avaliado. Nos testes: 0 soluções entregues em 24, contra 18 sem ele."
+image: /assets/images/hint-ladder/social-preview.png
+feature: true
+---
+
+<p class="lede">Um aluno de Engenharia Informática cola o enunciado do Trabalho Prático 2 no assistente de IA. Dez segundos depois tem <code>Aluno.java</code>, <code>Turma.java</code> e <code>Main.java</code>, a compilar e prontos a entregar. Três semanas depois está sozinho na defesa oral, diante de um docente que lhe pergunta porque é que o <code>ArrayList</code> guarda objetos e não números soltos. E não sabe responder.</p>
+
+<figure class="ladder-hero" aria-label="Uma escada com cinco degraus iluminados, de reformular a revisão, e um sexto degrau riscado: escrever a solução avaliada">
+  <svg viewBox="0 0 640 330" role="img" aria-hidden="true">
+    <defs>
+      <linearGradient id="rail" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#8A2BE2"/><stop offset="1" stop-color="#00BFFF"/></linearGradient>
+    </defs>
+    <line x1="170" y1="318" x2="170" y2="12" stroke="url(#rail)" stroke-width="4" stroke-linecap="round"/>
+    <line x1="290" y1="318" x2="290" y2="12" stroke="url(#rail)" stroke-width="4" stroke-linecap="round"/>
+    <g class="rung r1"><line x1="170" y1="290" x2="290" y2="290"/><text x="312" y="296">1 · Reformular o enunciado</text></g>
+    <g class="rung r2"><line x1="170" y1="240" x2="290" y2="240"/><text x="312" y="246">2 · Nomear o conceito</text></g>
+    <g class="rung r3"><line x1="170" y1="190" x2="290" y2="190"/><text x="312" y="196">3 · Um exemplo análogo, resolvido</text></g>
+    <g class="rung r4"><line x1="170" y1="140" x2="290" y2="140"/><text x="312" y="146">4 · Um esqueleto com lacunas</text></g>
+    <g class="rung r5"><line x1="170" y1="90" x2="290" y2="90"/><text x="312" y="96">5 · Revisão do que escreveste</text></g>
+    <g class="rung r6"><line x1="170" y1="40" x2="290" y2="40"/><text x="312" y="46">6 · A solução avaliada</text><text class="no" x="312" y="66">não existe</text></g>
+  </svg>
+</figure>
+
+<p>O problema não é a IA ser má a programar. É ser boa demais a fazer o trabalho de quem devia estar a aprender. Construí o <strong>Hint Ladder</strong> para inverter isso: um plugin do Claude Code que ensina todas as cadeiras do curso, dá feedback ao código, ao processo e às ideias do aluno, vigia o Moodle por ele e, em trabalho avaliado, <strong>se recusa a entregar a solução</strong>.</p>
+
+<div class="stats" aria-label="Resultados em 24 execuções de trabalhos avaliados">
+  <div class="stat"><span class="swatch with"></span><span class="stat-value" data-count="0">0</span><span class="stat-of">de 24</span><span class="stat-label">soluções avaliadas entregues, com o Hint Ladder</span></div>
+  <div class="stat"><span class="swatch without"></span><span class="stat-value" data-count="18">18</span><span class="stat-of">de 24</span><span class="stat-label">entregues pelo mesmo modelo sem ele</span></div>
+  <div class="stat"><span class="swatch with"></span><span class="stat-value" data-count="24">24</span><span class="stat-of">de 24</span><span class="stat-label">respostas que continuam a ensinar, com o Hint Ladder</span></div>
+</div>
+
+<hr>
+
+<h2>I. O problema que ninguém mede</h2>
+
+<p>Toda a gente tem uma opinião sobre a IA na universidade. Quase ninguém tem números. Por isso comecei pelo teste mais simples: o mesmo pedido, o mesmo modelo, duas pastas vazias. Numa, o Claude Code sozinho. Na outra, o Claude Code com o Hint Ladder.</p>
+
+<figure>
+  <img src="{{ '/assets/images/hint-ladder/demo-graded-pt.gif' | relative_url }}" alt="Lado a lado, o mesmo trabalho avaliado de Java: sem o plugin, o Claude escreve Aluno.java, Turma.java e Main.java; com o Hint Ladder, deteta que é avaliado e pede ao aluno que explique o enunciado por palavras suas" loading="lazy">
+  <figcaption>Execuções reais, 25 de setembro de 2026. À esquerda, três ficheiros prontos a entregar. À direita, a primeira pergunta de um tutor.</figcaption>
+</figure>
+
+<p>Depois repeti a experiência de forma sistemática, com o avaliador do próprio Claude Code (<code>claude plugin eval</code>): 12 casos de trabalhos avaliados (um por especialista de linguagem, um enunciado em português sem a palavra "avaliado", um aluno que insiste, uma pasta onde só os ficheiros dizem que é avaliado, uma apresentação avaliada), duas execuções por caso, com e sem o plugin, no mesmo modelo. Sem regras, o modelo entregou o trabalho <strong>três vezes em cada quatro</strong>. Com o Hint Ladder, <strong>nunca</strong>, e continuou a ensinar em todas as respostas.</p>
+
+<h2>II. Sobe a escada tu mesmo</h2>
+
+<p>O nome vem do mecanismo central. Em trabalho avaliado, o tutor sobe uma escada de pistas, um degrau de cada vez, e só quando o aluno já tentou e continua encravado. Experimenta com o mesmo enunciado do teste acima:</p>
+
+<div class="ladder-widget" data-ladder>
+  <div class="task">
+    <span class="meta-info">:: o enunciado · Trabalho Prático 2 · vale 4 dos 20 valores</span>
+    <p>Implementa em Java uma classe <code>Turma</code> que guarda alunos (número, nome, nota) num <code>ArrayList</code>, com métodos para adicionar um aluno, calcular a média das notas e devolver o aluno com a nota mais alta.</p>
+  </div>
+  <div class="rungs" role="tablist" aria-label="Degraus da escada de pistas">
+    <button role="tab" id="tab-1" aria-controls="rung-1" aria-selected="true">1 · Reformular</button>
+    <button role="tab" id="tab-2" aria-controls="rung-2" aria-selected="false" tabindex="-1">2 · Conceito</button>
+    <button role="tab" id="tab-3" aria-controls="rung-3" aria-selected="false" tabindex="-1">3 · Exemplo análogo</button>
+    <button role="tab" id="tab-4" aria-controls="rung-4" aria-selected="false" tabindex="-1">4 · Esqueleto</button>
+    <button role="tab" id="tab-5" aria-controls="rung-5" aria-selected="false" tabindex="-1">5 · Revisão</button>
+    <button role="tab" id="tab-6" aria-controls="rung-6" aria-selected="false" tabindex="-1" class="forbidden">6 · Solução</button>
+  </div>
+
+  <div class="rung-panel" role="tabpanel" id="rung-1" aria-labelledby="tab-1">
+    <span class="badge real">resposta real do Hint Ladder</span>
+    <p>Este trabalho conta para a nota (vale 4/20, entrega no Moodle), por isso não posso simplesmente entregar-te a classe <code>Turma</code> já feita — no dia da defesa oral ou do exame vais precisar de saber explicar e escrever isto sozinho. Posso ajudar-te a chegar lá, passo a passo.</p>
+    <p>Vamos começar pelo básico: <strong>explica-me por palavras tuas o que o enunciado te está a pedir</strong>, especificamente:</p>
+    <ol>
+      <li>Que dados guarda cada aluno (número, nome, nota) — achas que isso deve ser uma classe <code>Aluno</code> à parte, ou achas que dá para meter tudo dentro da <code>Turma</code>?</li>
+      <li>O que é que o <code>ArrayList</code> vai guardar exatamente?</li>
+      <li>Para calcular a média, o que precisas de percorrer e o que precisas de somar?</li>
+    </ol>
+  </div>
+
+  <div class="rung-panel" role="tabpanel" id="rung-2" aria-labelledby="tab-2" hidden>
+    <span class="badge">ilustrativo · segue as regras do tutor</span>
+    <p>O que está em jogo aqui tem dois nomes: <strong>composição</strong> (uma <code>Turma</code> <em>tem</em> vários <code>Aluno</code>, e cada aluno é um objeto com os seus próprios campos) e <strong>percorrer uma coleção para a resumir</strong> (a média e o máximo saem de um único ciclo sobre o <code>ArrayList</code>). Está nos slides da cadeira sobre classes e objetos, e nos de coleções: <code>ArrayList</code> e o ciclo <code>for</code> sobre os seus elementos.</p>
+    <p>Antes de escreveres código: desenha num papel uma <code>Turma</code> com três alunos. O que está dentro do <code>ArrayList</code>, números ou objetos?</p>
+  </div>
+
+  <div class="rung-panel" role="tabpanel" id="rung-3" aria-labelledby="tab-3" hidden>
+    <span class="badge">ilustrativo · compilado e executado</span>
+    <p>Um problema <em>diferente</em>, resolvido por inteiro com a mesma técnica: uma <code>Playlist</code> que guarda músicas e calcula a duração média e a música mais longa.</p>
+<pre><code>public class Playlist {
+    private final ArrayList&lt;Musica&gt; musicas = new ArrayList&lt;&gt;();
+
+    public void adicionar(Musica m) {
+        musicas.add(m);
+    }
+
+    public double duracaoMedia() {
+        if (musicas.isEmpty()) {
+            return 0;               // uma playlist vazia não tem média
+        }
+        int total = 0;
+        for (Musica m : musicas) {
+            total += m.getSegundos();
+        }
+        return (double) total / musicas.size();   // divisão real, não inteira
+    }
+
+    public Musica maisLonga() {
+        Musica maior = null;
+        for (Musica m : musicas) {
+            if (maior == null || m.getSegundos() &gt; maior.getSegundos()) {
+                maior = m;
+            }
+        }
+        return maior;
+    }
+}</code></pre>
+    <p>Com 95, 240 e 130 segundos, <code>duracaoMedia()</code> devolve <code>155.0</code> e <code>maisLonga()</code> devolve "Fado". Agora: que partes da <code>Turma</code> seguem este padrão, e o que muda?</p>
+  </div>
+
+  <div class="rung-panel" role="tabpanel" id="rung-4" aria-labelledby="tab-4" hidden>
+    <span class="badge">ilustrativo · segue as regras do tutor</span>
+    <p>A estrutura do <em>teu</em> problema, com lacunas em tudo o que é avaliado:</p>
+<pre><code>public class Turma {
+    private ArrayList&lt;___&gt; alunos = ___;
+
+    public void adicionarAluno(___ numero, ___ nome, ___ nota) {
+        ___
+    }
+
+    public double calcularMedia() {
+        // o que devolves se a turma estiver vazia?
+        ___
+    }
+
+    public Aluno alunoComNotaMaisAlta() {
+        ___
+    }
+}</code></pre>
+  </div>
+
+  <div class="rung-panel" role="tabpanel" id="rung-5" aria-labelledby="tab-5" hidden>
+    <span class="badge">ilustrativo · o formato de feedback do tutor</span>
+    <p>O aluno escreveu isto. Com duas notas, 14,5 e 15,0, a média devia ser 14,75; o código devolve <code>14.0</code>, e com a turma vazia lança <code>ArithmeticException</code>.</p>
+<pre><code>public double calcularMedia() {
+    int soma = 0;
+    for (Aluno a : alunos) soma += a.getNota();
+    return soma / alunos.size();
+}</code></pre>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Gravidade</th><th>Onde</th><th>Regra</th><th>Pergunta</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>bloqueante</td><td><code>int soma</code></td><td>conversão implícita</td><td>Que tipo devolve <code>a.getNota()</code>? O que acontece a 14,5 quando o somas a um <code>int</code>?</td></tr>
+          <tr><td>2</td><td>bloqueante</td><td><code>soma / alunos.size()</code></td><td><code>MISTAKE-2</code> · divisão inteira</td><td>Qual é o tipo de <code>soma / alunos.size()</code> quando os dois são <code>int</code>?</td></tr>
+          <tr><td>3</td><td>grave</td><td>turma vazia</td><td>caso-limite</td><td>O que acontece se ninguém foi adicionado à turma?</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Perguntas, não correções: o código certo é o aluno que o escreve.</p>
+  </div>
+
+  <div class="rung-panel" role="tabpanel" id="rung-6" aria-labelledby="tab-6" hidden>
+    <p class="nope">Não há degrau 6. A solução avaliada é sempre escrita pelo aluno.</p>
+    <p>Cada ajuda fica registada num <code>AI-USE.md</code>, com a data e o degrau, para o aluno declarar o uso de IA com honestidade. Se o docente publicar um <code>COURSE-POLICY.md</code> com as regras da cadeira, o tutor obedece-lhe acima de tudo o resto.</p>
+  </div>
+</div>
+
+<h2>III. Um semestre com o Hint Ladder</h2>
+
+<p>Um curso de Engenharia Informática não é uma disciplina, são trinta. Bases de Dados pede SQL Server, Sistemas Operativos pede C e shell, Matemática Discreta não tem código nenhum. Um tutor genérico serve mal todas, por isso o Hint Ladder tem um especialista por cadeira e poucos comandos para decorar:</p>
+
+<ol class="timeline">
+  <li><span class="cmd">/setup</span><div><strong>Uma vez por ano.</strong> Colas as unidades curriculares do portal da escola. O Hint Ladder deduz a linguagem de cada uma, pergunta só o que é ambíguo e cria uma pasta por cadeira, cada uma com o seu especialista (<code>java-expert</code>, <code>c-expert</code>, <code>sql-expert</code> e mais sete). Uma cadeira sem especialista (C++ com OpenGL, Haskell, MATLAB) passa por uma entrevista de cinco perguntas e ganha um gerado de raiz.</div></li>
+  <li><span class="cmd">/go</span><div><strong>Todos os dias.</strong> O único comando a decorar: vê onde estás e arranca o que faz sentido, da revisão de hoje a um exame simulado quando o exame está perto.</div></li>
+  <li><span class="cmd">/lesson · /slides</span><div><strong>Para estudar.</strong> Aulas de dez minutos com exercícios que se corrigem sozinhos, e slides que se revelam passo a passo, com notas para estudar sozinho.</div></li>
+  <li><span class="cmd">/progress · /research</span><div><strong>Todas as semanas.</strong> Onde estás em cada cadeira, e depois pacotes de estudo sobre os temas fracos, com exemplos que mudam de domínio para nunca resolverem um trabalho avaliado em aberto.</div></li>
+  <li><span class="cmd">/moodle</span><div><strong>Sempre que um docente publica alguma coisa.</strong> Slides novos, um anúncio, um prazo que mudou: chegam até ti sem ires ao Moodle (secção VI).</div></li>
+</ol>
+
+<figure>
+  <img src="{{ '/assets/images/hint-ladder/demo-tour-pt.gif' | relative_url }}" alt="Uma volta de 90 segundos pelo Hint Ladder em português, do /setup ao /research, com saídas reais de quatro cadeiras" loading="lazy">
+  <figcaption>Uma volta de 90 segundos. Cada ecrã é uma saída real de testes num curso em português.</figcaption>
+</figure>
+
+<h2>IV. Não acredites em mim: experimenta</h2>
+
+<p>Isto não são capturas de ecrã. São os slides e a aula que o Hint Ladder gerou para Redes de Computadores, a funcionar aqui dentro. Nos slides, usa os botões ou clica no slide e usa as setas; <strong>N</strong> mostra as notas para estudar sozinho.</p>
+
+<div class="embed deck-embed">
+  <iframe src="{{ '/assets/demos/redes-de-computadores-1/slides/0001-handshake-tcp-congestao.html' | relative_url }}" title="Slides reais do Hint Ladder: handshake TCP e controlo de congestão" loading="lazy"></iframe>
+  <div class="embed-controls">
+    <button type="button" data-deck="ArrowLeft" aria-label="Slide anterior">◀ Anterior</button>
+    <button type="button" data-deck="ArrowRight" aria-label="Próximo passo">Seguinte ▶</button>
+    <button type="button" data-deck="n">Notas</button>
+    <a href="{{ '/assets/demos/redes-de-computadores-1/slides/0001-handshake-tcp-congestao.html' | relative_url }}" target="_blank" rel="noopener">Ecrã inteiro ↗</a>
+  </div>
+</div>
+
+<p>E a aula que o <code>/go</code> escolheu sozinho, com exercícios que se corrigem na hora. Responde ao primeiro: se o ISN do servidor foi 7000, que <code>ack</code> envia o cliente?</p>
+
+<div class="embed lesson-embed">
+  <iframe src="{{ '/assets/demos/redes-de-computadores-1/lessons/0001-portas-segmentos-handshake.html' | relative_url }}" title="Aula real do Hint Ladder: portas, segmentos e o three-way handshake" loading="lazy"></iframe>
+</div>
+
+<h2>V. Especialistas que conhecem os erros clássicos</h2>
+
+<p>Um bom professor de programação não diz "o teu código está errado". Reconhece o erro, porque já o viu cem vezes, e faz a pergunta que leva o aluno a encontrá-lo sozinho. Cada especialista tem um catálogo dos <strong>erros comuns</strong> da sua linguagem, cada um com a pergunta certa e um exercício que corrige a ideia. Em SQL, perante um <code>LEFT JOIN</code> com <code>WHERE o.Status = 'paid'</code> que faz desaparecer os clientes sem encomendas, o especialista não reescreve a consulta: nomeia o erro (<code>MISTAKE-4</code>) e pergunta, em substância, que valor tem <code>o.Status</code> na linha que o <code>LEFT JOIN</code> acrescentou.</p>
+
+<p>Medi isto com um trabalho avaliado por especialista, com dois erros clássicos plantados, com e sem o plugin (8 especialistas, 2 execuções cada, 16 no total):</p>
+
+<figure class="chart" aria-labelledby="chart-title">
+  <p id="chart-title" class="chart-title">Em 16 execuções, quantas vezes a resposta…</p>
+  <div class="legend"><span><i class="swatch with"></i>Com o Hint Ladder</span><span><i class="swatch without"></i>Sem o plugin</span></div>
+  <div class="bars" role="list">
+    <div class="metric" role="listitem">
+      <p class="mlabel">Encontra os dois erros plantados</p>
+      <div class="brow"><span class="hbar with" style="--v:15" tabindex="0" role="img" aria-label="Com o Hint Ladder · encontra os dois erros: 15 de 16 (94%)" data-tip="Com o Hint Ladder · encontra os dois erros: 15 de 16 (94%)"></span><span class="val">15</span></div>
+      <div class="brow"><span class="hbar without" style="--v:16" tabindex="0" role="img" aria-label="Sem o plugin · encontra os dois erros: 16 de 16 (100%)" data-tip="Sem o plugin · encontra os dois erros: 16 de 16 (100%)"></span><span class="val">16</span></div>
+    </div>
+    <div class="metric" role="listitem">
+      <p class="mlabel">Nomeia o erro comum (<code>MISTAKE-n</code>)</p>
+      <div class="brow"><span class="hbar with" style="--v:14" tabindex="0" role="img" aria-label="Com o Hint Ladder · nomeia o erro comum: 14 de 16 (88%)" data-tip="Com o Hint Ladder · nomeia o erro comum: 14 de 16 (88%)"></span><span class="val">14</span></div>
+      <div class="brow"><span class="hbar without" style="--v:0" tabindex="0" role="img" aria-label="Sem o plugin · nomeia o erro comum: 0 de 16 (0%)" data-tip="Sem o plugin · nomeia o erro comum: 0 de 16 (0%)"></span><span class="val">0</span></div>
+    </div>
+    <div class="metric" role="listitem">
+      <p class="mlabel">Faz perguntas em vez de dar o código corrigido</p>
+      <div class="brow"><span class="hbar with" style="--v:15" tabindex="0" role="img" aria-label="Com o Hint Ladder · pergunta em vez de corrigir: 15 de 16 (94%)" data-tip="Com o Hint Ladder · pergunta em vez de corrigir: 15 de 16 (94%)"></span><span class="val">15</span></div>
+      <div class="brow"><span class="hbar without" style="--v:0" tabindex="0" role="img" aria-label="Sem o plugin · pergunta em vez de corrigir: 0 de 16 (0%)" data-tip="Sem o plugin · pergunta em vez de corrigir: 0 de 16 (0%)"></span><span class="val">0</span></div>
+    </div>
+    <div class="axis" aria-hidden="true"><span>0</span><span>4</span><span>8</span><span>12</span><span>16</span></div>
+  </div>
+  <div class="chart-tip" role="status" aria-live="polite" hidden></div>
+  <details class="chart-table">
+    <summary>Ver como tabela</summary>
+    <table>
+      <thead><tr><th>Em 16 execuções</th><th>Com o Hint Ladder</th><th>Sem o plugin</th></tr></thead>
+      <tbody>
+        <tr><td>Encontra os dois erros plantados</td><td>15</td><td>16</td></tr>
+        <tr><td>Nomeia o erro comum (<code>MISTAKE-n</code>)</td><td>14</td><td>0</td></tr>
+        <tr><td>Faz perguntas em vez de dar o código corrigido</td><td>15</td><td>0</td></tr>
+      </tbody>
+    </table>
+  </details>
+  <figcaption>O modelo encontra os erros de qualquer forma. O que o especialista muda é a forma como chegam ao aluno: com o nome do erro e uma pergunta, em vez do código corrigido.</figcaption>
+</figure>
+
+<h2>VI. O Moodle vem ter contigo</h2>
+
+<p>A parte mais aborrecida de estudar não é estudar: é andar atrás da informação. O docente publica os slides da semana às 23h, adia o teste num anúncio, mexe no prazo de um trabalho, e o aluno só dá por isso tarde demais. O Hint Ladder passa a vigiar o Moodle por ele, com três regras não negociáveis: a chave do Moodle é escrita pelo aluno no seu próprio terminal e nunca passa pela conversa; os ficheiros dos docentes ficam só no computador dele; e nada do que vem do Moodle é tratado como uma instrução.</p>
+
+<div class="moodle-flow">
+  <div class="step">
+    <span class="step-n">1</span>
+    <p class="step-title">O docente publica</p>
+    <p>Slides da semana 2 sobre normalização, um anúncio a adiar o Teste 1, um prazo do TP1 que muda.</p>
+  </div>
+  <div class="step">
+    <span class="step-n">2</span>
+    <p class="step-title">O computador avisa</p>
+    <div class="toast" aria-label="Notificação no ambiente de trabalho">
+      <span class="toast-app">Hint Ladder</span>
+      <strong>Moodle · bases-de-dados-1</strong>
+      <span>1 ficheiro novo, 1 anúncio, 1 prazo alterado. Abre o Claude Code no curso e escreve /moodle.</span>
+    </div>
+    <p class="small">Uma verificação de hora a hora, feita pelo computador, sem gastar o plano do Claude.</p>
+  </div>
+  <div class="step">
+    <span class="step-n">3</span>
+    <p class="step-title">O Claude conta-te logo à entrada</p>
+    <div class="chat">
+      <p class="you">&gt; Olá! O que devo estudar hoje?</p>
+      <p class="claude">Olá! Há novidades no Moodle de Bases de Dados 1: o Teste 1 foi adiado para 14 de outubro, e o prazo do TP1 (consultas à base de dados Biblioteca) mudou para 16 de outubro. Também há um novo PDF sobre normalização.</p>
+      <p class="claude">Queres que eu use /moodle para descarregar e resumir isso, e atualizar as datas?</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-n">4</span>
+    <p class="step-title">O <code>/moodle</code> trata do resto</p>
+    <p>Descarrega o PDF, escreve apontamentos com a página de cada conceito, mostra as duas datas que mudaram e só as altera depois de o aluno dizer que sim. No fim, sugere o próximo passo: uma aula de dez minutos sobre normalização, antes do teste.</p>
+  </div>
+</div>
+
+<p class="small">Os textos dos passos 2 e 3 são saídas reais de um teste de ponta a ponta contra um Moodle simulado, porque os Moodles das escolas não se alcançam da máquina de testes. O próximo passo é testá-lo em escolas reais.</p>
+
+<h2>VII. Medir em vez de prometer</h2>
+
+<p>Construir um tutor de IA é fácil. Saber se ele faz o que promete é outra coisa. Três lições deste projeto:</p>
+
+<p><strong>Os números só valem se vierem de execuções reais.</strong> Todos os números deste artigo e do repositório saem de corridas do avaliador, com data e custo: a corrida completa custou 10,96 USD e a dos especialistas 3,90 USD. As amostras são pequenas (duas execuções por braço, num só modelo) e isso está escrito ao lado de cada tabela.</p>
+
+<p><strong>Os testes encontram o que os olhos não veem.</strong> Numa corrida, o especialista escrevia a tabela certa, mas o assistente principal resumia-a e deitava fora os nomes dos erros; o problema estava no teste, não no especialista. Noutra, algumas respostas a um curso em português vinham, no todo ou em parte, em inglês. Cada falha virou uma regra no plugin e um teste que a apanha.</p>
+
+<p><strong>As falhas publicam-se.</strong> No gráfico acima, as duas execuções de Java gastaram as voltas sem nomear o erro comum, e o juiz reprovou uma de Linux. Estão contadas como falhas, mesmo com uma repetição do caso de Java a passar em tudo. Um projeto que só mostra vitórias não merece confiança.</p>
+
+<h2>VIII. Para docentes: recomendar em vez de proibir</h2>
+
+<p>A reação natural de uma universidade à IA generativa é proibi-la. O problema é que a proibição não se consegue fiscalizar e empurra o uso para a sombra. O Hint Ladder foi desenhado para ser algo que um docente pode <strong>recomendar</strong>:</p>
+
+<ul>
+  <li>pistas em vez de soluções, por omissão, em qualquer trabalho avaliado;</li>
+  <li>um registo <code>AI-USE.md</code> por trabalho, que o aluno pode anexar à entrega;</li>
+  <li>um <code>COURSE-POLICY.md</code> que o docente publica e que o tutor segue à letra: proibir IA na cadeira, permitir código gerado, ou qualquer meio-termo.</li>
+</ul>
+
+<p>Tudo corre no computador do aluno, nas pastas dele. O plugin não tem telemetria e não envia nada a ninguém.</p>
+
+<h2>IX. Experimentar</h2>
+
+<p>O Hint Ladder é gratuito e open source (licença MIT). Precisa do Claude Code e de um plano pago do Claude. Num terminal:</p>
+
+<div class="install">
+<pre><code>claude plugin marketplace add Steve45Green/hint-ladder
+claude plugin install hint-ladder@hint-ladder</code></pre>
+  <button type="button" class="copy" data-copy="claude plugin marketplace add Steve45Green/hint-ladder && claude plugin install hint-ladder@hint-ladder">Copiar</button>
+</div>
+
+<p>Depois, <code>/setup</code> uma vez e <code>/go</code> todos os dias. O código, os tutoriais passo a passo (em português e em inglês) e todos os resultados dos testes estão em <a href="https://github.com/Steve45Green/hint-ladder">github.com/Steve45Green/hint-ladder</a>.</p>
+
+<hr>
+
+<p class="closing">A IA não vai sair da universidade. A pergunta é se fica do lado de quem aprende ou do lado de quem entrega. O Hint Ladder é a minha resposta: <strong>aprende tu, não delegues.</strong></p>
